@@ -13,3 +13,51 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+
+enum PostStatus { DRAFT SCHEDULED PUBLISHED }
+enum SubStatus { PENDING ACTIVE UNSUBSCRIBED }
+
+model Post {
+  id          String     @id @default(cuid())
+  title       String
+  slug        String     @unique
+  markdown    String
+  html        String
+  status      PostStatus @default(DRAFT)
+  scheduledAt DateTime?
+  publishedAt DateTime?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  outboxEvents OutboxEvent[]
+}
+
+model Subscriber {
+  id        String    @id @default(cuid())
+  email     String    @unique
+  status    SubStatus @default(PENDING)
+  token     String?   @unique
+  createdAt DateTime  @default(now())
+  sends     Send[]
+}
+
+model OutboxEvent {
+  id        String   @id @default(cuid())
+  type      String
+  postId    String
+  uniqueKey String   @unique
+  createdAt DateTime @default(now())
+}
+
+model Send {
+  id           String   @id @default(cuid())
+  postId       String
+  subscriberId String
+  status       String   @default("QUEUED")
+  attempts     Int      @default(0)
+  lastError    String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@unique([postId, subscriberId])
+}
