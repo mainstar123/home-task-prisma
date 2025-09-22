@@ -15,8 +15,16 @@ datasource db {
 }
 
 
-enum PostStatus { DRAFT SCHEDULED PUBLISHED }
-enum SubStatus { PENDING ACTIVE UNSUBSCRIBED }
+enum PostStatus {
+  DRAFT
+  SCHEDULED
+  PUBLISHED
+}
+enum SubStatus {
+  PENDING
+  ACTIVE
+  UNSUBSCRIBED
+}
 
 model Post {
   id          String     @id @default(cuid())
@@ -29,7 +37,9 @@ model Post {
   publishedAt DateTime?
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
+  
   outboxEvents OutboxEvent[]
+  sends        Send[]
 }
 
 model Subscriber {
@@ -47,6 +57,8 @@ model OutboxEvent {
   postId    String
   uniqueKey String   @unique
   createdAt DateTime @default(now())
+
+  post Post @relation(fields: [postId], references: [id])
 }
 
 model Send {
@@ -58,6 +70,9 @@ model Send {
   lastError    String?
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
+
+  post       Post       @relation(fields: [postId], references: [id])
+  subscriber Subscriber @relation(fields: [subscriberId], references: [id])
 
   @@unique([postId, subscriberId])
 }
