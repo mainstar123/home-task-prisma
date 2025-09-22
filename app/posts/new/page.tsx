@@ -3,13 +3,14 @@
 import { useState } from "react";
 import axios from "axios";
 
+
 export default function NewPostPage() {
   const [title, setTitle] = useState("");
   const [markdown, setMarkdown] = useState("");
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    await axios.post("/api/posts", {title, markdown });
+    await axios.post('/api/posts', {title, markdown, slug:title });
     setTitle("");
     setMarkdown("");
   }

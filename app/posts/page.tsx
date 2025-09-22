@@ -1,6 +1,7 @@
 import Link from "next/link";
 import axios from "axios";
 
+
 export default async function PostsPage() {
   const { data: posts } = await axios.get(`${process.env.SITE_URL}/api/posts`);
 
