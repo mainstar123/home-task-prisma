@@ -13,17 +13,20 @@ export default function SubscribePage() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="p-6 space-y-4">
-      <input
-        type="email"
-        className="border p-2 w-full"
-        placeholder="Enter your email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <div>
+        <label className="block text-sm mb-1">Email</label>
+        <input
+          type="email"
+          className="border rounded-md p-2 w-full bg-white dark:bg-zinc-900 dark:border-zinc-800"
+          placeholder="you@example.com"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+      </div>
       <button
         type="submit"
-        className="bg-green-600 text-white px-4 py-2 rounded"
+        className="inline-flex items-center rounded-md bg-green-600 px-4 py-2 text-white hover:bg-green-700"
       >
         Subscribe
       </button>
