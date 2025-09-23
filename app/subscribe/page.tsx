@@ -21,7 +21,10 @@ export default function SubscribePage() {
         value={email}
         onChange={(e) => setEmail(e.target.value)}
       />
-      <button type="submit" className="bg-green-600 text-white px-4 py-2 rounded">
+      <button
+        type="submit"
+        className="bg-green-600 text-white px-4 py-2 rounded"
+      >
         Subscribe
       </button>
     </form>

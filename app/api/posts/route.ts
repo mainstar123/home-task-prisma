@@ -15,9 +15,16 @@ export async function POST(req: Request) {
   // If publishing now, create outbox event
   if (status === "PUBLISHED") {
     await prisma.outboxEvent.create({
-      data: { type: "PostPublished", postId: post.id, uniqueKey: `post:${post.id}` },
+      data: {
+        type: "PostPublished",
+        postId: post.id,
+        uniqueKey: `post:${post.id}`,
+      },
     });
-    await prisma.post.update({ where: { id: post.id }, data: { publishedAt: now } });
+    await prisma.post.update({
+      where: { id: post.id },
+      data: { publishedAt: now },
+    });
   }
 
   return NextResponse.json({ id: post.id });

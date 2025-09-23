@@ -3,14 +3,18 @@
 import { useState } from "react";
 import axios from "axios";
 
-
 export default function NewPostPage() {
   const [title, setTitle] = useState("");
   const [markdown, setMarkdown] = useState("");
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    await axios.post('/api/posts', {title, markdown, slug:title, status: "PUBLISHED" }); // we set status to published for now
+    await axios.post("/api/posts", {
+      title,
+      markdown,
+      slug: title,
+      status: "PUBLISHED",
+    }); // we set status to published for now
     setTitle("");
     setMarkdown("");
   }
@@ -29,7 +33,10 @@ export default function NewPostPage() {
         value={markdown}
         onChange={(e) => setMarkdown(e.target.value)}
       />
-      <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded">
+      <button
+        type="submit"
+        className="bg-blue-600 text-white px-4 py-2 rounded"
+      >
         Publish
       </button>
     </form>
