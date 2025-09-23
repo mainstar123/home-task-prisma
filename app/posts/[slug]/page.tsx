@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export default async function PostPage({ params }: { params: { slug: string } }) {
-    const { data: post } = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/posts/${params.slug}`);
+    const { data: post } = await axios.get(`${process.env.SITE_URL}/api/posts/${params.slug}`);
   
     return (
       <article className="prose p-6">

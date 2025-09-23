@@ -10,7 +10,7 @@ export default function NewPostPage() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    await axios.post('/api/posts', {title, markdown, slug:title });
+    await axios.post('/api/posts', {title, markdown, slug:title, status: "PUBLISHED" }); // we set status to published for now
     setTitle("");
     setMarkdown("");
   }
