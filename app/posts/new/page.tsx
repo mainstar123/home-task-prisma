@@ -6,17 +6,26 @@ import axios from "axios";
 export default function NewPostPage() {
   const [title, setTitle] = useState("");
   const [markdown, setMarkdown] = useState("");
+  const [scheduleMinutes, setScheduleMinutes] = useState("");
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    const minutes = Number(scheduleMinutes);
+    const shouldSchedule = Number.isFinite(minutes) && minutes > 0;
+    const scheduledAt = shouldSchedule
+      ? new Date(Date.now() + minutes * 60_000).toISOString()
+      : undefined;
+
     await axios.post("/api/posts", {
       title,
       markdown,
       slug: title,
-      status: "PUBLISHED",
-    }); // we set status to published for now
+      status: shouldSchedule ? "SCHEDULED" : "PUBLISHED",
+      ...(scheduledAt ? { scheduledAt } : {}),
+    });
     setTitle("");
     setMarkdown("");
+    setScheduleMinutes("");
   }
 
   return (
@@ -33,11 +42,19 @@ export default function NewPostPage() {
         value={markdown}
         onChange={(e) => setMarkdown(e.target.value)}
       />
+      <input
+        type="number"
+        min={0}
+        className="border p-2 w-full"
+        placeholder="Schedule in minutes (optional)"
+        value={scheduleMinutes}
+        onChange={(e) => setScheduleMinutes(e.target.value)}
+      />
       <button
         type="submit"
         className="bg-blue-600 text-white px-4 py-2 rounded"
       >
-        Publish
+        Publish / Schedule
       </button>
     </form>
   );
