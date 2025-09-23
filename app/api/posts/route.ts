@@ -2,6 +2,7 @@
 import { prisma } from "@/lib/prisma";
 import { render } from "@/lib/markdown";
 import { NextResponse } from "next/server";
+import { processBroadcastQueue } from "@/lib/broadcast";
 
 export async function POST(req: Request) {
   const { title, slug, markdown, status, scheduledAt } = await req.json();
@@ -25,6 +26,8 @@ export async function POST(req: Request) {
       where: { id: post.id },
       data: { publishedAt: now },
     });
+    // Immediately process broadcasting for this publish
+    await processBroadcastQueue(prisma);
   }
 
   return NextResponse.json({ id: post.id });
